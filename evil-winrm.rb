@@ -829,7 +829,11 @@ class EvilWinRM
 
             output = shell.run(command) do |stdout, stderr|
               stdout&.each_line do |line|
-                $stdout.puts(line.rstrip)
+                begin
+                  $stdout.puts(line.rstrip.force_encoding('utf-8').encode('cp1251').force_encoding('cp866').encode('utf-8'))
+                rescue
+                  $stdout.puts(line.rstrip)
+                end
               end
               $stderr.print(stderr)
             end
